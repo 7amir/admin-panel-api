@@ -1,0 +1,5 @@
+function token() {
+  return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L3dvcmRwcmVzcyIsImlhdCI6MTY5MTQ4Mzc0NCwibmJmIjoxNjkxNDgzNzQ0LCJleHAiOjE2OTIwODg1NDQsImRhdGEiOnsidXNlciI6eyJpZCI6IjEifX19.Asvm-svgvkTohyeSCrEX7szHaeoAd5z1gdHQFaI297A';
+}
+
+export {token}

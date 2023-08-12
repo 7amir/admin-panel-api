@@ -1,0 +1,25 @@
+@import './base.css';
+
+*,
+input {
+  font-family: Vazir-re;
+}
+
+@font-face {
+  font-family: Vazir-re;
+  src: url('../components/vazirmatn-v33.003/fonts/ttf/Vazirmatn-Regular.ttf');
+}
+
+@font-face {
+  font-family: Vazir-bold;
+  src: url('../components/vazirmatn-v33.003/fonts/ttf/Vazirmatn-Bold.ttf');
+}
+
+@font-face {
+  font-family: Vazir-bold-num;
+  src: url('../components/vazirmatn-v33.003/misc/Farsi-Digits/fonts/ttf/Vazirmatn-FD-Bold.ttf');
+}
+
+a {
+  text-decoration: none;
+}
