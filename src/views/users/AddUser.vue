@@ -4,47 +4,60 @@ import { token } from '../../components/store';
 export default {
   data() {
     return {
-      userName: '',
-      name: '',
+      username: '',
       email: '',
       password: '',
       result: '',
       userAdd: false,
-      addMessage: 'کاربر به لیست اضافه شد'
+      addMessage: 'کاربر به لیست اضافه شد',
     };
   },
   methods: {
     formData() {
       const newUser = {
-        username: this.userName,
-        name: this.name,  
+        username: this.username,
         email: this.email,
         password: this.password,
       };
-      axios.post('http://localhost/wordpress/wp-json/wp/v2/users',
-        newUser,
-        {
+      if (newUser.username && newUser.email && newUser.password) {
+        axios.post('http://localhost/wordpress/wp-json/wp/v2/users', newUser, {
           headers: {
             'Authorization': `Bearer ${token()}`,
             'content-Type': 'application/json',
           }
-        })
-        .then((result) => {
+        }).then((result) => {
           this.userAdd = true,
+            // خالی کردن اینپوت
+            this.username = '',
+            this.email = '',
+            this.password = '',
 
-          // خالی کردن اینپوت
-          this.userName = '',
-          this.name = '',
-          this.email = '',
-          this.password = '',
+            setTimeout(() => {
+              this.userAdd = false;
+            }, 3000);
+        }).catch(error => console.log(error))
 
-          setTimeout(() => {
-            this.userAdd = false;
-          }, 3000);
+      } else {
+        this.userAdd = true
+        this.addMessage = 'فیلدهای خالی را پر کنید'
 
-        })
-        .catch(error => console.log(error))
-    }
+        setTimeout(() => {
+          this.userAdd = false;
+        }, 3000);
+      }
+    },
+  },
+  computed: {
+    requiredRule() {
+      return value => !!value || 'الزامی است.';
+    },
+    minThreeCharactersRule() {
+      return value => (value && value.length > 3) || 'حداقل 4 کاراکتر.';
+    },
+    emailRule() {
+      return value =>
+        /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value) || 'فرمت ایمیل نادرست است.';
+    },
   }
 }
 </script>
@@ -54,27 +67,33 @@ export default {
     <h2>افزودن کاربر جدید</h2>
     <p>کاربر جدیدی بسازید و آن را به این سایت اضافه کنید</p>
 
-    <form action="/" @submit.prevent="formData">
-      <label>
-        نام کاربری
-        <input type="text" v-model="userName" required>
-      </label>
-      <label>
-        نام
-        <input type="text" v-model="name" required>
-      </label>
-      <label>
-        ایمیل
-        <input type="email" v-model="email" required>
-      </label>
-      <label>
-        پسورد
-        <input type="password" v-model="password" required>
-      </label>
-
-      <button>افزودن کاربر جدید</button>
+    <form action="/" @submit.prevent="formData" class="form-user-add">
+      <v-text-field
+        v-model="username"
+        label="نام کاربر" 
+        :rules="[minThreeCharactersRule, requiredRule]"
+        hide-details="auto">
+      </v-text-field>
+      <v-text-field 
+        v-model="email" 
+        label="ایمیل" 
+        :rules="[emailRule, requiredRule]"
+        hide-details="auto">
+      </v-text-field>
+      <v-text-field 
+        v-model="password" 
+        label="پسورد" 
+        :rules="[minThreeCharactersRule, requiredRule]"
+        hide-details="auto"
+        type="password">
+      </v-text-field>
+      <v-btn type="submit" class="btn-user-add">
+        افزودن کاربر جدید
+      </v-btn>
     </form>
-    <v-alert v-if="userAdd" text='کاربر به لیست اضافه شد'>
+
+    <v-alert v-if="userAdd">
+      {{ addMessage }}
     </v-alert>
   </div>
 </template>
@@ -95,27 +114,13 @@ p {
   color: #919191;
 }
 
-form {
-  margin-top: 2rem;
-}
-
-input {
-  width: 250px;
-  border: 1px solid;
-  border-radius: 2px;
-  background: #fff;
-  margin-right: .7rem;
-}
-
-label {
-  display: block;
-  text-align: left;
-  width: 100%;
+.form-user-add {
   margin-top: 1rem;
+  width: 500px;
 }
 
-button {
-  margin: 2rem 2rem;
+.btn-user-add {
+  margin: 1rem 0;
   border: none;
   background: #cd6133;
   color: #fff;
@@ -123,5 +128,9 @@ button {
   border-radius: 5px;
   font-size: 13px;
   cursor: pointer;
+}
+
+.v-input {
+  margin-bottom: 1.2rem;
 }
 </style>

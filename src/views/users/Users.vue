@@ -1,50 +1,10 @@
-<template>
-  <div class="users">
-    <h2>کاربران</h2>
-    <router-link to="/add" class="btn-add">
-      افزودن
-    </router-link>
-
-    <table>
-      <thead>
-        <tr>
-          <th>چک</th>
-          <th>شناسه</th>
-          <th>نام کاربری</th>
-          <!-- <th>ایمیل</th> -->
-          <!-- <th>ویرایش</th> -->
-          <th>حذف</th>
-        </tr>
-      </thead>
-      <tbody v-if="showUserList">
-        <tr v-for="data in userDataList" :key="data.id">
-          <td>
-            <input type="checkbox" v-model="selectedUsers" :value="data.id">
-          </td>
-          <td>{{ data.id }}</td>
-          <td>{{ data.name }}</td>
-          <!-- <td>{{ data.email }}</td> -->
-          <!-- <td @click="updateApi(data.id)">ver</td> -->
-          <td @click="deleteApi(data.id)">
-            <span class="fa fa-close">x</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="btn-show">
-      <button class="btn-show-users" @click="deleteSelectedUsers">حذف کاربران</button>
-    </div>
-  </div>
-</template>
-
 <script>
 import axios from 'axios';
 import { RouterLink } from 'vue-router';
 import { token } from '../../components/store';
 
 export default {
-  components: { RouterLink },
+  components: { RouterLink, token },
   data() {
     return {
       userDataList: '',
@@ -67,7 +27,7 @@ export default {
 
   methods: {
     // حذف کردن کاربر از لیست
-    deleteApi(id) {
+    delete(id) {
       axios.delete(`http://localhost/wordpress/wp-json/wp/v2/users/${id}?force=true&reassign=1`, {
         headers: {
           'Authorization': `Bearer ${token()}`,
@@ -75,30 +35,106 @@ export default {
       })
         .then((response) => {
           this.userDataList = this.userDataList.filter(user => user.id !== id);
+
         })
         .catch(error => console.log(error));
     },
     // آپدیدت کردن api
-    updateApi(id) {
-      axios.put(`http://localhost/wordpress/wp-json/wp/v2/users/${id}?name=fatiss`, {
-        headers: {
-          'Authorization': `Bearer ${token()}`,
-        }
+    // updateApi(id) {
+    //   axios.put(`http://localhost/wordpress/wp-json/wp/v2/users/${id}?name=fatiss`, {
+    //     headers: {
+    //       'Authorization': `Bearer ${token()}`,
+    //     }
+    //   })
+    //     .then((response) => {
+    //       console.log(response);
+    //     })
+    //     .catch(error => console.log(error));
+    // },
+    updateApi() {
+      const username = 'Amir';
+      const password = 'Amir@7ami';
+
+      const token = btoa(`${username}:${password}`);
+
+      axios.post('http://localhost/wordpress/wp-json/jwt-auth/v1/token', {
+        username: username,
+        password: password,
       })
         .then((response) => {
-          console.log(response);
+          const jwtToken = response.data.token;
+
+          axios.get('http://localhost/wordpress/wp-json/wp/v2/users', {
+            headers: {
+              'Authorization': `Bearer ${jwtToken}`,
+            },
+          })
+            .then((response) => {
+              console.log(response);
+              this.userDataList = response.data;
+              this.showUserList = true;
+            })
+            .catch(error => console.log(error));
         })
         .catch(error => console.log(error));
     },
     // انتخاب چمد کاربر و حذف آنها
     deleteSelectedUsers() {
       this.selectedUsers.forEach(userId => {
-        this.deleteApi(userId);
+        this.delete(userId);
+
+      });
+    },
+    pass() {
+      this.selectedUsers.forEach(userId => {
+        this.updateApi()
+        console.log(userId);
       });
     }
   }
 }
 </script>
+
+
+<template>
+  <div class="users">
+    
+    <h2>کاربران</h2>
+    <router-link to="/user-add" class="btn-add">
+      افزودن
+    </router-link>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>شناسه</th>
+          <th>نام کاربری</th>
+          <th>حذف</th>
+        </tr>
+      </thead>
+      <tbody v-if="showUserList">
+        <tr v-for="data in userDataList" :key="data.id">
+          <td>
+            <input type="checkbox" v-model="selectedUsers" :value="data.id">
+          </td>
+          <td>{{ data.id }}</td>
+          <td>{{ data.name }}</td>
+          <td>
+            <div @click="delete (data.id)">
+              <span class="fa fa-close">x</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="btn-show">
+      <v-btn class="btn-show-users" @click="deleteSelectedUsers()">حذف کاربران</v-btn>
+      <v-btn class="btn-show-users" @click="pass()">رمز</v-btn>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .users {
@@ -127,7 +163,17 @@ h2 {
   float: left;
 }
 
+.btn-add {
+  color: #fff;
+  background: #cd6133;
+}
+
 .btn-add:hover {
+  color: #cd6133;
+  background: #fff;
+}
+
+.btn-show-users:hover {
   background: #cd6133;
   color: #fff;
 }

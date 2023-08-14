@@ -1,11 +1,12 @@
 <script>
 import { RouterView } from 'vue-router'
-import AdminPanel from './components/admin-panel/AdminPanel.vue';
-import Admin from './components/admin-info/Admin.vue';
-import Login from './views/login-form/Login.vue';
+import AdminPanel from './components/panel/AdminPanel.vue';
+import Admin from './components/panel/Admin.vue';
+import Login from './views/forms/Login.vue';
+import Logout from './views/forms/Logout.vue';
 
 export default {
-  components: { RouterView, AdminPanel, Admin, Login },
+  components: { RouterView, AdminPanel, Admin, Login, Logout },
   data() {
     return {
       loginTo: false
@@ -15,7 +16,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <v-locale-provider rtl>
     <div class="admin-panels" v-if="loginTo">
       <AdminPanel />
       <RouterView />
@@ -23,12 +24,12 @@ export default {
     </div>
 
     <div v-else>
-      <Login :loginTo.sync="loginTo" @update:loginTo="loginTo = $event" />
+      <Login loginTo.sync="loginTo" @update:loginTo="loginTo = $event" />
     </div>
-  </div>
+  </v-locale-provider>
 </template>
 
-<style>
+<style scoped>
 body {
   margin: 0;
   padding: 0;
