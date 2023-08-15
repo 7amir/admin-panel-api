@@ -28,7 +28,7 @@ export default {
         }).then((result) => {
           this.userAdd = true,
             // خالی کردن اینپوت
-            this.username = '',
+            this.username = '', 
             this.email = '',
             this.password = '',
 

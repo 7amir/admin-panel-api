@@ -26,71 +26,53 @@ export default {
   },
 
   methods: {
-    // حذف کردن کاربر از لیست
-    delete(id) {
+    /**
+     * حذف کاربر 
+     * @param {user id} id - ایدی کاربر
+     */
+    userDelete(id) {
       axios.delete(`http://localhost/wordpress/wp-json/wp/v2/users/${id}?force=true&reassign=1`, {
         headers: {
           'Authorization': `Bearer ${token()}`,
         }
-      })
-        .then((response) => {
-          this.userDataList = this.userDataList.filter(user => user.id !== id);
-
-        })
-        .catch(error => console.log(error));
+      }).then((response) => {
+        this.userDataList = this.userDataList.filter(user => user.id !== id);
+      }).catch(error => console.log(error));
     },
-    // آپدیدت کردن api
-    // updateApi(id) {
-    //   axios.put(`http://localhost/wordpress/wp-json/wp/v2/users/${id}?name=fatiss`, {
-    //     headers: {
-    //       'Authorization': `Bearer ${token()}`,
-    //     }
+    // updateApi() {
+    //   const username = 'Amir';
+    //   const password = 'Amir@7ami';
+
+    //   const token = btoa(`${username}:${password}`);
+
+    //   axios.post('http://localhost/wordpress/wp-json/jwt-auth/v1/token', {
+    //     username: username,
+    //     password: password,
     //   })
     //     .then((response) => {
-    //       console.log(response);
+    //       const jwtToken = response.data.token;
+
+    //       axios.get('http://localhost/wordpress/wp-json/wp/v2/users', {
+    //         headers: {
+    //           'Authorization': `Bearer ${jwtToken}`,
+    //         },
+    //       })
+    //         .then((response) => {
+    //           console.log(response);
+    //           this.userDataList = response.data;
+    //           this.showUserList = true;
+    //         })
+    //         .catch(error => console.log(error));
     //     })
     //     .catch(error => console.log(error));
     // },
-    updateApi() {
-      const username = 'Amir';
-      const password = 'Amir@7ami';
 
-      const token = btoa(`${username}:${password}`);
-
-      axios.post('http://localhost/wordpress/wp-json/jwt-auth/v1/token', {
-        username: username,
-        password: password,
-      })
-        .then((response) => {
-          const jwtToken = response.data.token;
-
-          axios.get('http://localhost/wordpress/wp-json/wp/v2/users', {
-            headers: {
-              'Authorization': `Bearer ${jwtToken}`,
-            },
-          })
-            .then((response) => {
-              console.log(response);
-              this.userDataList = response.data;
-              this.showUserList = true;
-            })
-            .catch(error => console.log(error));
-        })
-        .catch(error => console.log(error));
-    },
     // انتخاب چمد کاربر و حذف آنها
     deleteSelectedUsers() {
       this.selectedUsers.forEach(userId => {
-        this.delete(userId);
-
+        this.userDelete(userId);
       });
     },
-    pass() {
-      this.selectedUsers.forEach(userId => {
-        this.updateApi()
-        console.log(userId);
-      });
-    }
   }
 }
 </script>
@@ -98,7 +80,6 @@ export default {
 
 <template>
   <div class="users">
-    
     <h2>کاربران</h2>
     <router-link to="/user-add" class="btn-add">
       افزودن
@@ -121,7 +102,7 @@ export default {
           <td>{{ data.id }}</td>
           <td>{{ data.name }}</td>
           <td>
-            <div @click="delete (data.id)">
+            <div @click="userDelete(data.id)">
               <span class="fa fa-close">x</span>
             </div>
           </td>
@@ -131,7 +112,6 @@ export default {
 
     <div class="btn-show">
       <v-btn class="btn-show-users" @click="deleteSelectedUsers()">حذف کاربران</v-btn>
-      <v-btn class="btn-show-users" @click="pass()">رمز</v-btn>
     </div>
   </div>
 </template>
