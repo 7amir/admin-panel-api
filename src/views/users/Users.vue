@@ -13,6 +13,9 @@ export default {
     }
   },
   mounted() {
+    /**
+     * api wordpress گرفتن لیست کاربر از 
+     */
     axios.get('http://localhost/wordpress/wp-json/wp/v2/users', {
       headers: {
         'Authorization': `Bearer ${token()}`,
@@ -39,35 +42,10 @@ export default {
         this.userDataList = this.userDataList.filter(user => user.id !== id);
       }).catch(error => console.log(error));
     },
-    // updateApi() {
-    //   const username = 'Amir';
-    //   const password = 'Amir@7ami';
 
-    //   const token = btoa(`${username}:${password}`);
-
-    //   axios.post('http://localhost/wordpress/wp-json/jwt-auth/v1/token', {
-    //     username: username,
-    //     password: password,
-    //   })
-    //     .then((response) => {
-    //       const jwtToken = response.data.token;
-
-    //       axios.get('http://localhost/wordpress/wp-json/wp/v2/users', {
-    //         headers: {
-    //           'Authorization': `Bearer ${jwtToken}`,
-    //         },
-    //       })
-    //         .then((response) => {
-    //           console.log(response);
-    //           this.userDataList = response.data;
-    //           this.showUserList = true;
-    //         })
-    //         .catch(error => console.log(error));
-    //     })
-    //     .catch(error => console.log(error));
-    // },
-
-    // انتخاب چمد کاربر و حذف آنها
+    /**
+     * انتخاب چمد کاربر و حذف آنها
+     */
     deleteSelectedUsers() {
       this.selectedUsers.forEach(userId => {
         this.userDelete(userId);

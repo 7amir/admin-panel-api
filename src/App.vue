@@ -9,7 +9,8 @@ export default {
   components: { RouterView, AdminPanel, Admin, Login, Logout },
   data() {
     return {
-      loginTo: false
+      loginTo: false,
+      value: true
     }
   },
   methods: {
@@ -18,14 +19,14 @@ export default {
       if (!logoutValue) {
         this.$router.push('/login'); // انتقال به صفحه لاگین با استفاده از روتر Vue.js
       }
-    }
+    },
   }
 }
 </script>
 
 <template>
   <v-locale-provider rtl>
-    <div class="admin-panels" v-if="loginTo">
+    <div class="admin-panels" v-if="!loginTo">
       <AdminPanel />
       <RouterView loginTo.sync="loginTo" @update:loginTo="loginTo = $event"/>
       <Admin /> 
