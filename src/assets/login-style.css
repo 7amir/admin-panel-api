@@ -1,0 +1,11 @@
+.v-alert .v-alert__prepend {
+  display: none;
+}
+
+.input__form .v-field__field {
+  background: #fff;
+}
+
+.v-messages__message {
+  text-align: right ;
+}
