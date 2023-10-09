@@ -1,4 +1,22 @@
-@import './base.css';
+@import "./base.css";
+
+:root {
+  --blue: #1e90ff;
+  --body-bk: #f9fafa;
+  --white-e: #eee;
+  --black: #333;
+  --white: #fff;
+  --icon-color: #757269;
+  --search-box: #fff;
+  --form__user: #fff
+}
+
+body {
+  background: var(--body-bk);
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
 
 *,
 input {
@@ -6,20 +24,322 @@ input {
 }
 
 @font-face {
-  font-family: Vazir-re;
-  src: url('../../fonts/vazirmatn-v33.003/fonts/ttf/Vazirmatn-Regular.ttf');
-}
-
-@font-face {
   font-family: Vazir-bold;
-  src: url('../../fonts/vazirmatn-v33.003/fonts/ttf/Vazirmatn-Bold.ttf');
+  src: url("../../public/fonts/vazirmatn-v33.003/misc/Farsi-Digits/fonts/ttf/Vazirmatn-FD-Bold.ttf");
 }
 
 @font-face {
-  font-family: Vazir-bold-num;
-  src: url('../../fonts/vazirmatn-v33.003/misc/Farsi-Digits/fonts/ttf/Vazirmatn-FD-Bold.ttf');
+  font-family: Vazir-light;
+  src: url("../../public/fonts/vazirmatn-v33.003/fonts/ttf/Vazirmatn-Light.ttf");
+}
+
+@font-face {
+  font-family: Vazir-re;
+  src: url("../../fonts/vazirmatn-v33.003/misc/Farsi-Digits/fonts/ttf/Vazirmatn-FD-Regular.ttf");
 }
 
 a {
   text-decoration: none;
+  color: var(--black);
+}
+
+button {
+  letter-spacing: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (min-width: 1280px) {
+  .v-container {
+    max-width: 1330px !important;
+  }
+}
+
+.select-role .v-input__details {
+  display: none;
+}
+
+.sidebar .v-list-item-title {
+  font-family: Vazir-bold;
+  font-size: 18px !important;
+  line-height: 2rem !important;
+}
+
+.sidebar .v-avatar {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.v-data-table-footer__pagination {
+  flex-direction: row-reverse;
+}
+
+.v-list .v-list-group__items .v-list-item {
+  padding-inline-start: 16px !important;
+}
+
+.list-sidebar .v-list-item__prepend {
+  margin-left: -13px;
+}
+
+.list-sidebar .v-list-item {
+  padding: 4px 16px 4px 16px !important;
+}
+
+.list-sidebar .v-list-item-title {
+  font-size: 12.5px;
+  color: #ddd;
+}
+
+.list-sidebar .title .v-list-item-title {
+  font-size: 14.5px;
+  color: #fff;
+}
+
+.v-data-table-footer {
+  font-size: 14.5px;
+}
+
+.one-item .v-list-item__append {
+  display: none;
+}
+
+.v-data-table-footer .v-field__input {
+  padding: 3px 10px 0px 0 !important;
+  min-height: 0;
+}
+
+.v-data-table-footer .v-field {
+  padding-left: 4px;
+}
+
+.v-navigation-drawer__content {
+  background-color: #39424c;
+  color: #fff;
+}
+
+.v-toolbar__content > .v-toolbar-title {
+  margin-inline-start: 0px !important;
+  font-size: 18px;
+}
+
+/* جستجو هدر */
+.search-box .v-card {
+  box-shadow: 0px 2px 6px rgba(17, 43, 66, 0.08),
+    0px 1px 4px rgba(17, 43, 66, 0.1) !important;
+  background: var(--white);
+  border-radius: 5px;
+}
+
+.search-box .v-field {
+  background: var(--search-box);
+  color: var(--black) !important;
+}
+
+.search-box .v-field--center-affix .v-label.v-field-label {
+  font-size: 14px;
+}
+
+.subject {
+  font-family: Vazir-bold;
+  font-size: 22px;
+  margin-bottom: 0.2rem;
+  color: var(--black);
+}
+
+.router-address {
+  color: var(--black);
+  font-family: Vazir-light;
+  font-size: 12px;
+}
+
+.v-data-table .v-table__wrapper > table > thead > tr > th {
+  height: 48px !important;
+  border-bottom: 1px solid #c5c5c5 !important;
+  background: #eee !important;
+  color: #000 !important;
+}
+.v-data-table .v-table__wrapper > table > thead > tr > th .mdi-arrow-up {
+  display: none;
+}
+
+.v-data-table {
+  box-shadow: 0px 1px 2px rgba(25, 39, 52, 0.05),
+    0px 0px 4px rgba(25, 39, 52, 0.1) !important;
+    font-size: 14.5px;
+}
+
+.header-information {
+  margin-bottom: 1.2rem;
+}
+
+.header-information .v-btn {
+  height: 35px !important;
+  font-size: 13px;
+}
+
+.v-data-table-column--align-center,
+.v-data-table-column--align-start {
+  border-bottom: 1px solid #eee !important;
+}
+
+.row-form .v-field__input {
+  min-height: 38px;
+  padding: 7px 16px;
+  border-radius: 5px;
+}
+
+.row-form .v-field:focus-within {
+  box-shadow: 0 0 0 2px #68717840;
+}
+
+.row-form .v-field--variant-solo,
+.v-field--variant-solo-filled {
+  background: var(--white-e);
+  box-shadow: none;
+  color: var(--black);
+  font-size: 14.5px;
+  
+}
+
+/* آیکون */
+.v-list-item__prepend > .v-icon {
+  color: #ddd;
+}
+.mdi-circle-outline {
+  padding: 0 6px 0 0 !important;
+  font-size: 14px !important;
+}
+
+.mdi-square-edit-outline {
+  padding: 13px 9px;
+  color: #616161 !important;
+  font-size: 19px !important;
+  transition: all 0.1s ease-in-out;
+}
+.mdi-square-edit-outline:hover {
+}
+
+.mdi-trash-can-outline {
+  color: #616161 !important;
+  padding: 13px 9px;
+  font-size: 20px !important;
+  transition: all 0.1s ease-in-out;
+}
+
+.mdi-trash-can-outline:hover {
+}
+
+.v-badge__badge {
+  right: 25% !important;
+  top: 18% !important;
+}
+
+.form__user {
+  width: 100%;
+  box-shadow: 0px 1px 2px rgba(25, 39, 52, 0.05),
+    0px 0px 4px rgba(25, 39, 52, 0.1) !important;
+  border-radius: 7px;
+  background: var(--search-box);
+}
+
+.row-form {
+  padding: 1rem 1.5rem;
+}
+
+.card-text {
+  padding: 0 !important;
+}
+
+.title {
+  font-size: 15px;
+  color: #666666;
+  border-bottom: 1px solid #c5c5c5;
+}
+
+label {
+  top: -4.5%;
+  position: relative;
+  font-size: 13px;
+  color: var(--black);
+}
+
+label > span {
+  color: red;
+}
+
+.v-input {
+  margin-bottom: 0 !important;
+}
+
+.link-to-list {
+  color: var(--black);
+}
+
+.v-textarea .v-field__input {
+  -webkit-mask-image: none !important; 
+}
+
+.text-h6 {
+  font-family: Vazir-re !important;
+  text-align: center;
+}
+
+.v-card-actions {
+  justify-content: center;
+}
+
+.v-dialog {
+  padding-right: 255px;
+}
+
+.btn__custom-add-list {
+  color: #2962ff !important;
+  border: 1px solid #2962ff !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn__custom-add-list:hover {
+  background-color: #2962ff;
+  color: #fff !important;
+}
+
+.btn__custom-delete {
+  color: #b71c1c !important;
+  border: 1px solid #b71c1c !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn__custom-delete:hover {
+  background-color: #b71c1c;
+  color: #fff !important;
+}
+
+.btn__custom-list {
+  color: #3d8d43 !important;
+  border: 1px solid #3d8d43 !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn__custom-list:hover {
+  background-color: #3d8d43;
+  color: #fff !important;
+}
+
+.action-dropdown {
+  padding: 0 9px !important;
+  min-width: 0 !important;
+  border-radius: 50% !important;
+}
+
+.action-dropdown-title {
+  font-size: 14.5px !important;
+}
+.action-dropdown-title:hover .mdi-trash-can-outline {
+  color: red !important;
+}
+.action-dropdown-title:hover .mdi-square-edit-outline {
+  color: #00c853 !important;
+}
+.action-dropdown-title:hover {
+  color: #000 !important;
 }

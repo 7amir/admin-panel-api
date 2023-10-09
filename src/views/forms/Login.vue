@@ -1,14 +1,13 @@
 <script>
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
-import '../../assets/login-style.css'
 import { token } from '../../components/store';
-// import { mdiAccount } from "@mdi/js";
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiAccount, mdiEyeOutline, mdiEyeOffOutline  } from '@mdi/js';
- 
+import { mdiAccount, mdiEyeOutline, mdiEyeOffOutline, mdiLock, mdiEmail } from '@mdi/js';
+
 export default {
-  components: { RouterLink, SvgIcon},
+  name: 'login',
+  components: { RouterLink, SvgIcon },
   data() {
     return {
       username: '',
@@ -21,33 +20,30 @@ export default {
       signIn: false,
       valid: false,
       revealPassword: false,
-      path: mdiAccount,mdiEyeOutline, mdiEyeOffOutline,
-
+      path: mdiAccount, mdiEyeOutline, mdiEyeOffOutline, mdiLock, mdiEmail,
+      iconVisible: true,
+      passIconVisible: true,
+      emailIconVisible: true,
       nameRules: [
         value => {
-          if (value) return true
+          if (value) return true;
         },
         value => {
-          if (value?.length <= 10) return true
-
-          return 'Name must be less than 10 characters.'
+          if (value?.length <= 10) return true;
+          return 'نام  و رمز کاربر باید زیر 10 کاراکتر باشد';
         },
       ],
       email: '',
       emailRules: [
         value => {
-          if (value) return true
+          if (value) return true;
         },
         value => {
-          if (/.+@.+\..+/.test(value)) return true
-
-          return 'فرمت ایمیل را درست وارد کنید'
+          if (/.+@.+\..+/.test(value)) return true;
+          return 'فرمت ایمیل را درست وارد کنید';
         },
       ],
     };
-  },
-  icons: {
-    mdiAccount
   },
   methods: {
     formData() {
@@ -63,8 +59,8 @@ export default {
             'content-Type': 'application/json',
           }
         }).then((result) => {
-          console.log(result);
           this.$emit('update:loginTo', true);
+          this.$router.push('/');
         }).catch(error => console.log(error))
 
       } else {
@@ -90,7 +86,9 @@ export default {
           this.$emit('update:loginTo', true);
           this.$router.push('/'); // تغییر به صفحه ادمین پنل
           this.isEmptyError = false;
+          this.snackbar = false
         } catch (error) {
+          this.snackbar = true
           this.isEmptyError = true;
           this.showErrorMessage = 'ورود ناموفق: نام کاربری یا رمز اشتباه می‌باشد';
         }
@@ -101,16 +99,6 @@ export default {
         }, 3000);
       }
     },
-    showFocus(event) {
-      const parent = event.target.parentNode;
-      parent.classList.add("focus");
-    },
-    removeFocus(event) {
-      const parent = event.target.parentNode;
-      if (this.username === "") {
-        parent.classList.remove("focus");
-      }
-    },
     login() {
       this.signIn = !this.signIn
     },
@@ -118,7 +106,6 @@ export default {
       this.revealPassword = !this.revealPassword;
     }
   },
-
 };
 </script>
 
@@ -127,91 +114,76 @@ export default {
 
   <v-container class="container">
     <div class="login-content">
-      <form action="/" @submit.prevent="submit" v-if="signIn">
+      <v-form v-model="valid" @submit.prevent="submit" v-if="signIn">
         <img src="../../../public/img/avatar.svg" alt="">
-        <h2 class="title">خوش آمدید</h2>
-
-        <div class="input__login user">
-          <i class="fas fa-user"></i>
-          <input
-            type="text"
-            class="input" 
-            placeholder="نام کاربر" 
-            v-model="username" 
-            @focus="showFocus"
-            @blur="removeFocus"
-            >
-        </div>
-        <div class="input__login pass">
-          <i class="fas fa-lock"></i>
-          <input 
-            :type="revealPassword ? 'text' : 'password'"
-            class="input" 
-            placeholder="رمز کاربر" 
-            v-model="password"
-            @focus="showFocus" 
-            @blur="removeFocus"
-            >
-          <div class="icon-eye" @click="changePass()">
-            <svg-icon type="mdi" 
-              :path="revealPassword ? mdiEyeOutline : mdiEyeOffOutline" 
-              class="icon"
-              >
-            </svg-icon>
-          </div>
-        </div>
-        <a href="#" class="link__sing-in" @click="login()">برای ثبت نام کلیک کنید</a>
-        <v-btn class="btn" @click="checkLogin()">
-          ورود
-        </v-btn>
-        <v-alert variant="outlined" type="error" border="bottom" v-if="isEmptyError">
-          {{ showErrorMessage }}
-        </v-alert>
-      </form>
-
-      <v-form v-model="valid" v-if="!signIn" @submit.prevent="formData">
-        <img src="../../../public/img/avatar.svg" alt="">
-        <h2 class="title">فرم ثبت نام</h2>
+        <h2>خوش آمدید</h2>
         <v-container>
           <v-row>
             <v-col cols="12">
-              <v-text-field
-                v-model="newUsername" 
-                :rules="nameRules" 
-                :counter="10" 
-                label="نام کاربر" 
-                required
-                class="input__form"
-                >
+              <v-text-field label="نام کاربر" variant="underlined" :counter="10" :rules="nameRules" v-model="username">
+                <template v-slot:prepend-inner>
+                  <v-icon size="small">mdi-account</v-icon>
+                </template>
               </v-text-field>
             </v-col>
 
             <v-col cols="12">
-              <v-text-field
-                v-model="newEmail" 
-                :rules="emailRules" 
-                label="ایمیل"
-                required
-                class="input__form"
-                >
-              </v-text-field>
-            </v-col>
-
-            <v-col cols="12">
-              <v-text-field
-                :type="revealPassword ? 'text' : 'password'"
-                v-model="newPassword"
-                :rules="nameRules"
-                :counter="10"
-                label="رمز عبور"
-                required
-                class="input__form"
-                >
+              <v-text-field label="رمز عبور" variant="underlined" :counter="10" :rules="nameRules" v-model="password"
+                :type="revealPassword ? 'text' : 'password'">
+                <template v-slot:prepend-inner>
+                  <v-icon size="small">mdi-lock</v-icon>
+                </template>
                 <div class="icon-eye" @click="changePass()">
-                  <svg-icon type="mdi" :path="revealPassword ? mdiEyeOutline : mdiEyeOffOutline" class="icon"></svg-icon>
+                  <svg-icon type="mdi" :path="revealPassword ? mdiEyeOutline : mdiEyeOffOutline"></svg-icon>
                 </div>
               </v-text-field>
             </v-col>
+
+            <a href="#" @click="login()">برای ثبت نام کلیک کنید</a>
+            <v-btn type="submit" class="btn" @click="checkLogin()">
+              ورود
+            </v-btn>
+            <v-alert variant="outlined" type="error" border="bottom" v-if="isEmptyError">
+              {{ showErrorMessage }}
+            </v-alert>
+          </v-row>
+        </v-container>
+      </v-form>
+
+      <v-form v-model="valid" v-if="!signIn" @submit.prevent="formData">
+        <img src="../../../public/img/avatar.svg" alt="">
+        <h2>فرم ثبت نام</h2>
+        <v-container>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field label="نام کاربر" variant="underlined" :counter="10" :rules="nameRules" v-model="newUsername">
+                <template v-slot:prepend-inner>
+                  <v-icon size="small">mdi-account</v-icon>
+                </template>
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="ایمیل" variant="underlined" v-model="newEmail" :rules="emailRules" type="email"
+                required>
+                <template v-slot:prepend-inner>
+                  <v-icon size="small">mdi-email</v-icon>
+                </template>
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="رمز عبور" variant="underlined" :counter="10"
+                :type="revealPassword ? 'text' : 'password'" v-model="newPassword" :rules="nameRules" required>
+                <template v-slot:prepend-inner>
+                  <v-icon size="small">mdi-lock</v-icon>
+                </template>
+                <div class="icon-eye" @click="changePass()">
+                  <svg-icon type="mdi" :path="revealPassword ? mdiEyeOutline : mdiEyeOffOutline"></svg-icon>
+                </div>
+              </v-text-field>
+            </v-col>
+
             <a href="#" @click="login()">از قبل اکانت دارید؟</a>
             <v-btn type="submit" class="btn">
               ثبت نام
@@ -222,12 +194,11 @@ export default {
           </v-row>
         </v-container>
       </v-form>
-
+      
     </div>
     <div class="img">
       <img src="../../../public/img/bg.svg" alt="">
     </div>
-
   </v-container>
 </template>
 
@@ -292,60 +263,12 @@ form {
   border-bottom: 2px solid #d9d9d9;
 }
 
-.login-content .input__login.user {
-  margin-top: 0;
-}
-
 i,
 .input__login svg {
   transition: 0.3s;
   color: #d9d9d9;
-  position: relative;
-  top: 12px;
-  right: 12px;
 }
 
-.input__login:before,
-.input__login:after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  width: 0%;
-  height: 2px;
-  background-color: #38d39f;
-  transition: 0.4s;
-}
-
-.input__login:before {
-  right: 50%;
-}
-
-.input__login:after {
-  left: 50%;
-}
-
-.input__login.focus:before,
-.input__login.focus:after {
-  width: 50%;
-}
-
-.input__login.focus>svg {
-  color: #38d39f;
-}
-
-.input__login input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: none;
-  padding: 0.5rem 0.7rem 0.2rem;
-  font-size: 1rem;
-  color: #555;
-}
-
-.input__login.pass {
-  margin-bottom: 4px;
-}
 
 a {
   display: block;
@@ -357,10 +280,6 @@ a {
   margin-right: 12px;
 }
 
-.link__sing-in {
-  margin-top: 1rem;
-  margin-right: 0;
-}
 
 a:hover {
   color: #38d39f;
@@ -390,12 +309,20 @@ a:hover {
 
 .icon-eye {
   position: absolute;
+  cursor: pointer;
+  color: #d9d9d9;
   left: 2%;
 }
 
-.icon {
-  cursor: pointer;
-  color: #d9d9d9;
+.v-alert .v-alert__prepend {
+  display: none;
+}
 
+.input__form .v-field__field {
+  background: #fff;
+}
+
+.v-messages__message {
+  text-align: right;
 }
 </style>
